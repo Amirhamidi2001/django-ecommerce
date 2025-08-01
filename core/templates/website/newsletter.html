@@ -1,0 +1,38 @@
+{% load static %}
+<!-- Latest Offers Start -->
+<div class="latest-wrapper lf-padding">
+  <div class="latest-area latest-height d-flex align-items-center" data-background="{% static 'img/collection/latest-offer.png' %}">
+    <div class="container">
+      <div class="row d-flex align-items-center">
+        <div class="col-xl-5 col-lg-5 col-md-6 offset-xl-1 offset-lg-1">
+          <div class="latest-caption">
+            <h2>Get Our
+              <br>Latest Offers News
+            </h2>
+            <p>Subscribe news latter
+            </p>
+          </div>
+        </div>
+        <div class="col-xl-5 col-lg-5 col-md-6 ">
+          <div class="latest-subscribe">
+            <form action="{% url 'website:newsletter' %}" method="post">
+              {% csrf_token %}
+              <input type="email" name="email" placeholder="Your email here">
+              <button>Shop Now</button>
+            </form>
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- man Shape -->
+    <div class="man-shape">
+      <img src="{% static 'img/collection/latest-man.png' %}" alt="">
+    </div>
+  </div>
+</div>
+<!-- Latest Offers End -->
