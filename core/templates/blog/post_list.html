@@ -41,7 +41,7 @@
                                 </a>
                                 <p>{{ post.content|truncatewords:30 }}</p>
                                 <ul class="blog-info-link">
-                                    <li><a href="{% url 'blog:post-list' %}?author={{ post.author.username }}"><i class="fa fa-user"></i>{{post.author.get_full_name}}</a></li>
+                                    <li><a href="{% url 'blog:post-list' %}?author={{ post.author.profile.first_name }}"><i class="fa fa-user"></i>{{post.author.profile.first_name}}</a></li>
                                     <li><a href="{% url 'blog:post-detail' post.pk %}"><i class="fa fa-comments"></i> {{post.comments.count}} Comments</a></li>
                                 </ul>
                             </div>

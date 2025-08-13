@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+    <!-- slider Area Start-->
+    <div class="slider-area ">
+        <!-- Mobile Menu -->
+        <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap text-center">
+                            <h2>Your Profile</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- slider Area End-->
+
+    <!--================ profile_part Area =================-->
+    <section class="login_part section_padding">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+                    <div class="login_part_form">
+                        <div class="login_part_form_iner">
+                            <h3>Your Profile <br> Manage your information</h3>
+                            <form class="row contact_form" action="" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                                {% csrf_token %}
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="text" class="form-control" id="id_first_name" name="first_name" placeholder="First Name" value="{{ form.instance.first_name }}">
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="text" class="form-control" id="id_last_name" name="last_name" placeholder="Last Name" value="{{ form.instance.last_name }}">
+                                </div>
+                                <div class="col-md-6 form-group p_star">
+                                    <input type="text" class="form-control" id="id_phone_number" name="phone_number" placeholder="Phone Number" value="{{ form.instance.phone_number }}">
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="text" class="form-control" id="id_bio" name="bio" placeholder="Bio" value="{{ form.instance.bio }}">
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="file" class="form-control" id="id_profile_picture" name="profile_picture" placeholder="Profile Picture" accept="image/*">
+                                </div>
+                                <div class="col-md-12 form-group p_star">
+                                    <input type="text" class="form-control" id="id_birth_date" name="birth_date" placeholder="Birth Date" value="{{ form.instance.birth_date }}">
+                                </div>
+                                <div class="col-md-12 form-group">
+                                    <button type="submit" class="btn_3">Update Profile</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ profile_part end =================-->
+
+
+{% endblock %}

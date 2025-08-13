@@ -27,12 +27,12 @@
             <div class="col-lg-8 posts-list">
                <div class="single-post">
                   <div class="feature-img">
-                     <img class="img-fluid" src="{% static 'img/blog/single_blog_1.png' %}" alt="">
+                     <img class="img-fluid" src="{{ post.image.url }}" alt="">
                   </div>
                   <div class="blog_details">
                      <h2>{{post.title}}</h2>
                      <ul class="blog-info-link mt-3 mb-4">
-                        <li><a href="{% url 'blog:post-list' %}?author={{ post.author.username }}"><i class="fa fa-user"></i> {{post.author.get_full_name}}</a></li>
+                        <li><a href="{% url 'blog:post-list' %}?author={{ post.author.profile.first_name }}"><i class="fa fa-user"></i> {{post.author.profile.first_name}}</a></li>
                         <li><a href="#"><i class="fa fa-comments"></i> {{post.comments.count}} Comments</a></li>
                      </ul>
                      <p class="excert">{{ post.content }}</p>
@@ -108,10 +108,9 @@
                      <img src="{% static 'img/blog/author.png' %}" alt="">
                      <div class="media-body">
                         <a href="#">
-                           <h4>Harvard milan</h4>
+                           <h4>{{ post.author.profile.first_name }}</h4>
                         </a>
-                        <p>Second divided from form fish beast made. Every of seas all gathered use saying you're, he
-                           our dominion twon Second divided from</p>
+                        <p>{{ post.author.profile.bio }}</p>
                      </div>
                   </div>
                </div>

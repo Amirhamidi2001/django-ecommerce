@@ -1,0 +1,17 @@
+{% if messages %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+<script>
+    {% for message in messages %}
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 3000,
+            gravity: "top", // "top" or "bottom"
+            position: "right", // "left", "center" or "right"
+            backgroundColor: `{% if 'success' in message.tags %}#4CAF50{% elif 'error' in message.tags %}#f44336{% elif 'warning' in message.tags %}#ff9800{% else %}#333{% endif %}`,
+            close: true
+        }).showToast();
+    {% endfor %}
+</script>
+{% endif %}

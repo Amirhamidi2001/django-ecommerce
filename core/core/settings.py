@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "accounts.apps.AccountsConfig",
     "website.apps.WebsiteConfig",
     "blog.apps.BlogConfig",
     "taggit",
@@ -132,3 +133,9 @@ MEDIA_ROOT = "media/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "accounts.CustomUser"
+
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "website:index"   # Your homepage name
+LOGOUT_REDIRECT_URL = "accounts:login"

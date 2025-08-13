@@ -27,7 +27,7 @@ class PostListView(ListView):
         if category:
             queryset = queryset.filter(category__name__iexact=category)
         if author:
-            queryset = queryset.filter(author__username__iexact=author)
+            queryset = queryset.filter(author__profile__first_name__iexact=author)
         if tag:
             queryset = queryset.filter(tags__slug__iexact=tag)
         if date_str:

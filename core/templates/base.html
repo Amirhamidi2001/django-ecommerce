@@ -68,7 +68,11 @@
                   <div class="header-info-right">
                     <ul>                                          
                       <li>
-                        <a href="login.html">My Account </a>
+                          {% if user.is_authenticated %}
+                              <a href="{% url 'accounts:profile' %}">My Account</a>
+                          {% else %}
+                              <a href="{% url 'accounts:login' %}">My Account</a>
+                          {% endif %}
                       </li>
                       <li>
                         <a href="product_list.html">Wish List  </a>
@@ -129,7 +133,7 @@
                           <a href="#">Pages</a>
                           <ul class="submenu">
                             <li>
-                              <a href="login.html">Login</a>
+                              <a href="{% url 'accounts:login' %}">Login</a>
                             </li>
                             <li>
                               <a href="cart.html">Card</a>
@@ -178,8 +182,12 @@
                           </i></a>
                       </div>
                     </li>
-                    <li class="d-none d-lg-block"> 
-                      <a href="#" class="btn header-btn">Sign in</a>
+                    <li class="d-none d-lg-block">
+                      {% if user.is_authenticated %}
+                        <a href="{% url 'accounts:logout' %}" class="btn header-btn">Logout</a>
+                      {% else %}
+                        <a href="{% url 'accounts:login' %}" class="btn header-btn">Sign in</a>
+                      {% endif %}
                     </li>
                   </ul>
                 </div>
@@ -194,7 +202,9 @@
         </div>
       </div>
       <!-- Header End -->
+       {% include 'messages.html' %}
     </header>
+
 {% block content %}
 
 {% endblock %}
