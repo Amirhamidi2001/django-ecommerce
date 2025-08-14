@@ -113,44 +113,10 @@
                             <a href="{% url 'website:about' %}">About</a>
                         </li>
                         <li>
-                          <a href="Catagori.html">Catagori</a>
-                        </li>
-                        <li class="hot">
-                          <a href="#">Latest</a>
-                          <ul class="submenu">
-                            <li>
-                              <a href="product_list.html"> Product list</a>
-                            </li>
-                            <li>
-                              <a href="single-product.html"> Product Details</a>
-                            </li>
-                          </ul>
+                          <a href="{% url 'shop:product-list' %}">Product list</a>
                         </li>
                         <li>
                           <a href="{% url 'blog:post-list' %}">Blog</a>
-                        </li>
-                        <li>
-                          <a href="#">Pages</a>
-                          <ul class="submenu">
-                            <li>
-                              <a href="{% url 'accounts:login' %}">Login</a>
-                            </li>
-                            <li>
-                              <a href="cart.html">Card</a>
-                            </li>
-                            <li>
-                              <a href="elements.html">Element</a>
-                            </li>
-                            <li>
-                              <a href="confirmation.html">Confirmation</a>
-                            </li>
-                            <li>
-                              <a href="cart.html">Shopping Cart</a>
-                            </li>
-                            <li>
-                              <a href="checkout.html">Product Checkout</a>
-                            </li>
-                          </ul>
                         </li>
                         <li>
                           <a href="{% url 'website:contact' %}">Contact</a>
@@ -242,7 +208,7 @@
                       <a href="{% url 'blog:post-list' %}"> Our Blog</a>
                     </li>
                     <li>
-                      <a href="#"> Get Coupon</a>
+                      <a href="{% url 'shop:product-list' %}"> Our Shop</a>
                     </li>
                     <li>
                       <a href="{% url 'website:contact' %}">  Contact Us</a>

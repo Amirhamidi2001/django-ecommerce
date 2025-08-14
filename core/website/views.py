@@ -5,6 +5,7 @@ from django.contrib import messages
 
 from .forms import ContactForm, NewsletterForm
 
+
 class IndexView(TemplateView):
     template_name = "website/index.html"
 
@@ -24,7 +25,10 @@ class ContactFormView(FormView):
         return super().form_valid(form)
 
     def form_invalid(self, form):
-        messages.error(self.request, "There was an error in your submission. Please check the form.")
+        messages.error(
+            self.request,
+            "There was an error in your submission. Please check the form.",
+        )
         return super().form_invalid(form)
 
 
@@ -35,7 +39,9 @@ class NewsletterSubscribeView(FormView):
 
     def form_valid(self, form):
         form.save()
-        messages.success(self.request, "You've successfully subscribed to the newsletter!")
+        messages.success(
+            self.request, "You've successfully subscribed to the newsletter!"
+        )
         return super().form_valid(form)
 
     def form_invalid(self, form):

@@ -20,11 +20,6 @@
               <input type="email" name="email" placeholder="Your email here">
               <button>Shop Now</button>
             </form>
-            {% if messages %}
-              {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-              {% endfor %}
-            {% endif %}
           </div>
         </div>
       </div>

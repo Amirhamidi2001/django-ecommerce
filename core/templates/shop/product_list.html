@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Slider Area Start -->
+<div class="slider-area">
+    <!-- Mobile Menu -->
+    <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="hero-cap text-center">
+                        <h2>Product List</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Slider Area End -->
+
+<!-- Product list part start -->
+<section class="product_list section_padding">
+    <div class="container">
+        <div class="row">
+
+            <!-- Sidebar Filters -->
+            <div class="col-md-4">
+                <div class="product_sidebar">
+                    <form method="get" action="">
+                        <!-- Search -->
+                        <div class="single_sedebar">
+                            <input type="text" name="search" placeholder="Search keyword"
+                                   value="{{ search_query }}">
+                            <i class="ti-search"></i>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="single_sedebar">
+                            <div class="select_option">
+                                <div class="select_option_list">Category <i class="right fas fa-caret-down"></i></div>
+                                <div class="select_option_dropdown">
+                                    <p><a href="?{% if search_query %}search={{ search_query }}{% endif %}">All</a></p>
+                                    {% for cat in categories %}
+                                        <p>
+                                            <a href="?search={{ search_query }}&category={{ cat.slug }}{% if sort_option %}&sort={{ sort_option }}{% endif %}"
+                                               {% if selected_category == cat.slug %}style="font-weight:bold"{% endif %}>
+                                                {{ cat.name }}
+                                            </a>
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Brand Filter -->
+                        <div class="single_sedebar">
+                            <div class="select_option">
+                                <div class="select_option_list">Brand <i class="right fas fa-caret-down"></i></div>
+                                <div class="select_option_dropdown">
+                                    <p><a href="?search={{ search_query }}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if sort_option %}&sort={{ sort_option }}{% endif %}">All</a></p>
+                                    {% for br in brands %}
+                                        <p>
+                                            <a href="?search={{ search_query }}{% if selected_category %}&category={{ selected_category }}{% endif %}&brand={{ br.slug }}{% if sort_option %}&sort={{ sort_option }}{% endif %}"
+                                               {% if selected_brand == br.slug %}style="font-weight:bold"{% endif %}>
+                                                {{ br.name }}
+                                            </a>
+                                        </p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sorting -->
+                        <div class="single_sedebar">
+                            <div class="select_option">
+                                <div class="select_option_list">Sort by <i class="right fas fa-caret-down"></i></div>
+                                <select class="select_option_dropdown" name="sort" id="sort" onchange="this.form.submit()">
+                                    <option value="">Default</option>
+                                    <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                                    <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                                    <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Name: A-Z</option>
+                                    <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Name: Z-A</option>
+                                    <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest First</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Products -->
+            <div class="col-md-8">
+                <div class="product_list">
+                    <div class="row">
+                        {% for product in products %}
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="single_product_item">
+                                    <a href="{{ product.get_absolute_url }}">
+                                        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+                                    </a>
+                                    <h3>
+                                        <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                                    </h3>
+                                    <p>From ${{ product.price }}</p>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No products found.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--================ Pagination =================-->
+                <section class="blog_area section-padding">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8 mb-5 mb-lg-0">
+                                <div class="blog_left_sidebar">
+                                    <nav class="blog-pagination justify-content-center d-flex">
+                                    {% if is_paginated %}
+                                    <ul class="pagination">
+                                        {# Previous Page Link #}
+                                        {% if page_obj.has_previous %}
+                                        <li class="page-item">
+                                            <a href="?page={{ page_obj.previous_page_number }}" class="page-link" aria-label="Previous">
+                                                <i class="ti-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <a href="#" class="page-link" aria-label="Previous">
+                                                <i class="ti-angle-left"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                        {# Page Numbers #}
+                                        {% for num in paginator.page_range %}
+                                            {% if num == page_obj.number %}
+                                                <li class="page-item active">
+                                                    <a href="#" class="page-link">{{ num }}</a>
+                                                </li>
+                                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                                <li class="page-item">
+                                                    <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {# Next Page Link #}
+                                        {% if page_obj.has_next %}
+                                        <li class="page-item">
+                                            <a href="?page={{ page_obj.next_page_number }}" class="page-link" aria-label="Next">
+                                                <i class="ti-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="page-item disabled">
+                                            <a href="#" class="page-link" aria-label="Next">
+                                                <i class="ti-angle-right"></i>
+                                            </a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                    {% endif %}
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--================ Pagination =================-->
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product list part end -->
+<!-- Shop Method Start-->
+    <div class="shop-method-area section-padding30">
+        <div class="container">
+            <div class="row d-flex justify-content-between">
+                <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="single-method mb-40">
+                        <i class="ti-package"></i>
+                        <h6>Free Shipping Method</h6>
+                        <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="single-method mb-40">
+                        <i class="ti-unlock"></i>
+                        <h6>Secure Payment System</h6>
+                        <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                    </div>
+                </div> 
+                <div class="col-xl-3 col-lg-3 col-md-6">
+                    <div class="single-method mb-40">
+                        <i class="ti-reload"></i>
+                        <h6>Secure Payment System</h6>
+                        <p>aorem ixpsacdolor sit ameasecur adipisicing elitsf edasd.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Shop Method End-->
+
+  {% include "website/newsletter.html" %}
+
+{% endblock %}

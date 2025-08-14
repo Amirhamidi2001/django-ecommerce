@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.humanize",
     "accounts.apps.AccountsConfig",
-    "website.apps.WebsiteConfig",
     "blog.apps.BlogConfig",
+    "shop.apps.ShopConfig",
+    "website.apps.WebsiteConfig",
     "taggit",
 ]
 
@@ -137,5 +138,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "accounts.CustomUser"
 
 LOGIN_URL = "accounts:login"
-LOGIN_REDIRECT_URL = "website:index"   # Your homepage name
+LOGIN_REDIRECT_URL = "website:index"  # Your homepage name
 LOGOUT_REDIRECT_URL = "accounts:login"

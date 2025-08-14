@@ -19,9 +19,9 @@ class NewsletterAdmin(admin.ModelAdmin):
     Admin interface for managing website newsletter.
     """
 
-    list_display = ("email","subscribed_at")
-    search_fields = ("email","subscribed_at")
-    list_filter = ("email","subscribed_at")
+    list_display = ("email", "subscribed_at")
+    search_fields = ("email", "subscribed_at")
+    list_filter = ("email", "subscribed_at")
 
 
 admin.site.register(Contact, ContactAdmin)
