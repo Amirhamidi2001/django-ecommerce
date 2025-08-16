@@ -21,6 +21,29 @@
 
 <!-- Product list part start -->
 <section class="product_list section_padding">
+    <section class="latest-product-area latest-padding">
+    <div class="container">
+        <div class="row product-btn d-flex justify-content-between">
+        <div class="select-this d-flex">
+            <div class="featured">
+            <span>Short by: </span>
+            </div>
+            <form action="#">
+            <div class="select-itms">
+                <select name="sort" id="sort" onchange="this.form.submit()">
+                <option value="">Default</option>
+                <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+                <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+                <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Name: A-Z</option>
+                <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Name: Z-A</option>
+                <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest First</option>
+                </select>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+    </div>
     <div class="container">
         <div class="row">
 
@@ -68,21 +91,6 @@
                                         </p>
                                     {% endfor %}
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Sorting -->
-                        <div class="single_sedebar">
-                            <div class="select_option">
-                                <div class="select_option_list">Sort by <i class="right fas fa-caret-down"></i></div>
-                                <select class="select_option_dropdown" name="sort" id="sort" onchange="this.form.submit()">
-                                    <option value="">Default</option>
-                                    <option value="price_asc" {% if sort_option == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-                                    <option value="price_desc" {% if sort_option == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-                                    <option value="name_asc" {% if sort_option == 'name_asc' %}selected{% endif %}>Name: A-Z</option>
-                                    <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Name: Z-A</option>
-                                    <option value="newest" {% if sort_option == 'newest' %}selected{% endif %}>Newest First</option>
-                                </select>
                             </div>
                         </div>
                     </form>

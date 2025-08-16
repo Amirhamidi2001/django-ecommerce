@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "accounts.apps.AccountsConfig",
     "blog.apps.BlogConfig",
+    "cart.apps.CartConfig",
     "shop.apps.ShopConfig",
     "website.apps.WebsiteConfig",
     "taggit",

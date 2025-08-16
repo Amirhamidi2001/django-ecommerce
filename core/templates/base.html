@@ -78,13 +78,13 @@
                         <a href="product_list.html">Wish List  </a>
                       </li>
                       <li>
-                        <a href="cart.html">Shopping</a>
+                        <a href="{% url 'cart:cart' %}">Shopping</a>
                       </li>
                       <li>
-                        <a href="cart.html">Cart</a>
+                        <a href="{% url 'cart:cart' %}">Cart</a>
                       </li>
                       <li>
-                        <a href="checkout.html">Checkout</a>
+                        <a href="{% url 'cart:checkout' %}">Checkout</a>
                       </li>
                     </ul>
                   </div>
@@ -144,7 +144,7 @@
                     </li>
                     <li>
                       <div class="shopping-card">
-                        <a href="cart.html"><i class="fas fa-shopping-cart">
+                        <a href="{% url 'cart:cart' %}"><i class="fas fa-shopping-cart">
                           </i></a>
                       </div>
                     </li>
