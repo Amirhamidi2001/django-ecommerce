@@ -75,12 +75,6 @@
                           {% endif %}
                       </li>
                       <li>
-                        <a href="product_list.html">Wish List  </a>
-                      </li>
-                      <li>
-                        <a href="{% url 'cart:cart' %}">Shopping</a>
-                      </li>
-                      <li>
                         <a href="{% url 'cart:cart' %}">Cart</a>
                       </li>
                       <li>
@@ -128,24 +122,21 @@
                 <div class="col-xl-5 col-lg-3 col-md-3 col-sm-3 fix-card">
                   <ul class="header-right f-right d-none d-lg-block d-flex justify-content-between">
                     <li class="d-none d-xl-block">
-                      <div class="form-box f-right ">
-                        <input type="text" name="Search" placeholder="Search products">
-                        <div class="search-icon">
-                          <i class="fas fa-search special-tag">
-                          </i>
-                        </div>
-                      </div>
-                    </li>
-                    <li class=" d-none d-xl-block">
-                      <div class="favorit-items">
-                        <i class="far fa-heart">
-                        </i>
+                      <div class="form-box f-right">
+                        <form method="get" action="{% url 'shop:product-list' %}">
+                          <input type="text" name="search" placeholder="Search products" value="{{ search_query|default:'' }}">
+                          <button type="submit" class="search-icon" style="border:none; background:none;">
+                            <i class="fas fa-search special-tag"></i>
+                          </button>
+                        </form>
                       </div>
                     </li>
                     <li>
                       <div class="shopping-card">
-                        <a href="{% url 'cart:cart' %}"><i class="fas fa-shopping-cart">
-                          </i></a>
+                        <a href="{% url 'cart:cart' %}">
+                          <i class="fas fa-shopping-cart"></i>
+                          <span class="cart-count" id="cart-count">{{ cart.get_total_quantity }}</span>
+                        </a>
                       </div>
                     </li>
                     <li class="d-none d-lg-block">

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
+from decimal import Decimal
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
@@ -70,7 +71,6 @@ class Category(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        # Auto-generate slug from name if not provided
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
@@ -139,6 +139,26 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("shop:product-single", args=[self.slug])
 
+    def get_price(self, include_tax=False, discount=None):
+        """
+        Returns the final price of the product.
+        :param include_tax: If True, add tax (example: 10%).
+        :param discount: A Decimal or percentage (e.g., 0.1 for 10%).
+        """
+        final_price = Decimal(self.price)
+
+        if discount:
+            if discount < 1:
+                final_price = final_price * (1 - Decimal(discount))
+            else:
+                final_price = final_price - Decimal(discount)
+
+        if include_tax:
+            tax_rate = Decimal("0.10")
+            final_price = final_price * (1 + tax_rate)
+
+        return final_price.quantize(Decimal("0.01"))
+
     @property
     def in_stock(self):
         return self.stock > 0
@@ -163,7 +183,7 @@ class ProductImage(models.Model):
         upload_to="products/gallery/",
         format="JPEG",
         options={"quality": 90},
-        processors=[ResizeToFill(800, 800)],  # optional, ensures uniform size
+        processors=[ResizeToFill(800, 800)],
     )
 
     def __str__(self):

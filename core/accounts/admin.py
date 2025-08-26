@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.sessions.models import Session
+
 from .models import CustomUser, UserProfile
 
 
@@ -66,5 +68,14 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_filter = ("user__type",)
 
 
+class SessionAdmin(admin.ModelAdmin):
+    def _session_data(self, obj):
+        return obj.get_decoded()
+
+    list_display = ["session_key", "_session_data", "expire_date"]
+    readonly_fields = ["_session_data"]
+
+
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Session, SessionAdmin)

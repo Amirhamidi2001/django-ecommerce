@@ -1,10 +1,23 @@
 from django.urls import path
-
-from .views import CartView, CheckoutView
+from . import views
 
 app_name = "cart"
 
 urlpatterns = [
-    path("", CartView.as_view(), name="cart"),
-    path("checkout/", CheckoutView.as_view(), name="checkout"),
+    path(
+        "session/add-product/",
+        views.SessionAddProductView.as_view(),
+        name="session-add-product",
+    ),
+    path(
+        "session/remove-product/",
+        views.SessionRemoveProductView.as_view(),
+        name="session-remove-product",
+    ),
+    path(
+        "session/update-product-quantity/",
+        views.SessionUpdateProductQuantityView.as_view(),
+        name="checkout",
+    ),
+    path("cart/", views.CartSummaryView.as_view(), name="cart"),
 ]

@@ -18,7 +18,6 @@
         </div>
     </div>
     <!-- slider Area End-->
-
 <!--================Single Product Area =================-->
 <div class="product_image_area">
     <div class="container">
@@ -57,7 +56,7 @@
                                 <span class="product_count_item number-decrement">
                                     <i class="ti-minus"></i>
                                 </span>
-                                <input class="product_count_item input-number" type="text" value="1" min="1" max="{{ product.stock }}">
+                                <input id="product-quantity" class="product_count_item input-number" type="text" value="1" min="1" max="{{ product.stock }}">
                                 <span class="product_count_item number-increment">
                                     <i class="ti-plus"></i>
                                 </span>
@@ -66,11 +65,12 @@
                         </div>
 
                         <div class="add_to_cart">
-                            <form action="#" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit" class="btn_3">Add to Cart</button>
-                            </form>
+                            <!-- AJAX button -->
+                            <button type="button" 
+                                    class="btn_3 add-to-cart-btn" 
+                                    data-product-id="{{ product.id }}">
+                                Add to Cart
+                            </button>
                         </div>
                     </div>
 
@@ -104,6 +104,42 @@
 </div>
 <!--================End Single Product Area =================-->
 
-  {% include "website/newsletter.html" %}
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  {% endblock %}
+<script>
+$(document).ready(function() {
+    $(".add-to-cart-btn").click(function(e) {
+        e.preventDefault();
+
+        let productId = $(this).data("product-id");
+        let quantity = $("#product-quantity").val();
+
+        $.ajax({
+            url: "{% url 'cart:session-add-product' %}",
+            type: "POST",
+            data: {
+                product_id: productId,
+                quantity: quantity,
+                csrfmiddlewaretoken: "{{ csrf_token }}"
+            },
+            success: function(response) {
+                // Show success message
+                alert("Product added to cart!");
+                
+                // Update cart counter
+                $("#cart-count").text(response.total_quantity);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error adding product:", error);
+            }
+        });
+    });
+});
+</script>
+
+<!-- Example cart count badge (e.g., in navbar) -->
+<span id="cart-count">{{ cart.get_total_quantity }}</span>
+
+{% include "website/newsletter.html" %}
+{% endblock %}
