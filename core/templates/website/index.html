@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load blog_tags %}
 {% load shop_tags %}
 {% load static %}
 {% block content %}
@@ -108,6 +109,7 @@
             </div>
         </section>
         <!-- Category Area End-->
+
         <!-- Latest Products Start -->
         <section class="latest-product-area padding-bottom">
         <div class="container">
@@ -122,8 +124,8 @@
             {% show_latest_products 6 %}
         </div>
         </section>
-
         <!-- Latest Products End -->
+
         <!-- Best Product Start -->
         <div class="best-product-area lf-padding" >
            <div class="product-wrapper bg-height" style="background-image: url('{% static 'img/categori/card.png' %}')">
@@ -141,7 +143,7 @@
                             <div class="best-product-caption">
                                 <h2>Find The Best Product<br> from Our Shop</h2>
                                 <p>Designers who are interesten creating state ofthe.</p>
-                                <a href="#" class="black-btn">Shop Now</a>
+                                <a href="{% url 'shop:product-list' %}" class="black-btn">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -162,7 +164,7 @@
                         <div class="best-left-cap">
                             <h2>Best Collection of This Month</h2>
                             <p>Designers who are interesten crea.</p>
-                            <a href="#" class="btn shop1-btn">Shop Now</a>
+                            <a href="{% url 'shop:product-list' %}" class="btn shop1-btn">Shop Now</a>
                         </div>
                         <div class="best-left-img mb-30 d-none d-sm-block">
                             <img src="{% static 'img/collection/collection1.png' %}" alt="">
@@ -211,9 +213,15 @@
             </div>
         </div>
         <!-- Best Collection End -->
-        
+
+        <!-- Latest Postd Start -->
+        {% latest_posts 6 %}
+        <!-- Latest Postd End -->
+
+        <!-- Latest Offers Start -->
         {% include "website/newsletter.html" %}
-        
+        <!-- Latest Offers End -->
+
         <!-- Shop Method Start-->
         <div class="shop-method-area section-padding30">
             <div class="container">
@@ -243,31 +251,6 @@
             </div>
         </div>
         <!-- Shop Method End-->
-        <!-- Gallery Start-->
-        <div class="gallery-wrapper lf-padding">
-            <div class="gallery-area">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="gallery-items">
-                            <img src="{% static 'img/gallery/gallery1.jpg' %}" alt="">
-                        </div> 
-                        <div class="gallery-items">
-                            <img src="{% static 'img/gallery/gallery2.jpg' %}" alt="">
-                        </div>
-                        <div class="gallery-items">
-                            <img src="{% static 'img/gallery/gallery3.jpg' %}" alt="">
-                        </div>
-                        <div class="gallery-items">
-                            <img src="{% static 'img/gallery/gallery4.jpg' %}" alt="">
-                        </div>
-                        <div class="gallery-items">
-                            <img src="{% static 'img/gallery/gallery5.jpg' %}" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Gallery End-->
 
     </main>
 {% endblock %}
