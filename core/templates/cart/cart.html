@@ -2,22 +2,22 @@
 {% load static %}
 {% block content %}
 
-  <!-- slider Area Start-->
-  <div class="slider-area ">
-    <!-- Mobile Menu -->
-    <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="hero-cap text-center">
-                        <h2>Card List</h2>
-                    </div>
-                </div>
-            </div>
+<!-- slider Area Start-->
+<div class="slider-area ">
+  <!-- Mobile Menu -->
+  <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="hero-cap text-center">
+            <h2>Card List</h2>
+          </div>
         </div>
+      </div>
     </div>
   </div>
-  <!-- slider Area End-->
+</div>
+<!-- slider Area End-->
 <!--================Cart Area =================-->
 <section class="cart_area section_padding">
   <div class="container">
@@ -35,37 +35,41 @@
           <tbody>
             {% if cart_items %}
               {% for item in cart_items %}
-                <tr>
+                <tr data-product-id="{{ item.product_id }}">
                   <td>
                     <div class="media">
                       <div class="d-flex" style="width: 80px; height: 80px; overflow: hidden;">
-                        {% if item.product_obj.image %}
-                          <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.name }}" class="img-fluid">
-                        {% else %}
-                          <img src="{% static 'img/product/no_image.png' %}" alt="No image" class="img-fluid">
-                        {% endif %}
+                        <img src="{{ item.product_obj.image.url }}" alt="{{ item.product_obj.name }}" class="img-fluid">
                       </div>
                       <div class="media-body">
-                        <p> {{ item.product_obj.name }}</p>
+                        <a href="{{ item.product_obj.get_absolute_url }}">
+                          <h4>{{ item.product_obj.name }}</h4>
+                        </a>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <h5>${{ item.product_obj.get_price }}</h5>
+                    <h5 class="product-price">${{ item.product_obj.get_price }}</h5>
                   </td>
                   <td>
                     <div class="product_count">
                       <span class="input-number-decrement"> <i class="ti-minus"></i></span>
-                      <input class="input-number" type="text" value="{{ item.quantity }}" min="1" max="{{ item.product_obj.stock }}">
+                      <input
+                        class="input-number"
+                        type="text"
+                        value="{{ item.quantity }}"
+                        min="1"
+                        max="{{ item.product_obj.stock }}"
+                        data-product-id="{{ item.product_obj.id }}"
+                      >
                       <span class="input-number-increment"> <i class="ti-plus"></i></span>
                     </div>
                   </td>
                   <td>
-                    <h5>${{ item.total_price }}</h5>
+                    <h5 class="product-total-price">${{ item.total_price }}</h5>
                   </td>
                 </tr>
               {% endfor %}
-
               <tr class="bottom_button">
                 <td>
                   <a class="btn_1" href="#">Update Cart</a>
@@ -84,19 +88,20 @@
                 <td>
                   <h5>Subtotal</h5>
                 </td>
-                <td>
+                <td id="cart-subtotal">
                   <h5>${{ total_payment_price }}</h5>
                 </td>
               </tr>
             {% else %}
               <tr>
                 <td colspan="4" class="text-center">
-                  <p>Your cart is empty.</p>
+                  <p>Your cart is empty</p>
                 </td>
               </tr>
             {% endif %}
           </tbody>
         </table>
+
         <div class="checkout_btn_inner float-right">
           <a class="btn_1" href="{% url 'shop:product-list' %}">Continue Shopping</a>
           {% if cart_items %}
@@ -108,5 +113,140 @@
   </div>
 </section>
 <!--================End Cart Area =================-->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // CSRF setup for Django AJAX POST
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie("csrftoken");
+
+  function sendQuantityUpdate(productId, quantity, onSuccess, onError) {
+    fetch("{% url 'cart:session-update-product-quantity' %}", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": csrftoken,
+      },
+      body: new URLSearchParams({
+        product_id: productId,
+        quantity: quantity,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.total_quantity !== undefined) {
+          onSuccess(data);
+        } else {
+          onError("Invalid response");
+        }
+      })
+      .catch(error => {
+        onError(error);
+      });
+  }
+
+  function updateRowTotal(row, quantity) {
+    const priceCell = row.querySelector(".product-price");
+    const totalCell = row.querySelector(".product-total-price");
+    if (!priceCell || !totalCell) return;
+
+    let price = parseFloat(priceCell.textContent.replace("$", "")) || 0;
+    let total = price * quantity;
+    totalCell.textContent = `$${total.toFixed(2)}`;
+  }
+
+  function updateCartSubtotal() {
+    let subtotal = 0;
+    document.querySelectorAll("tbody tr[data-product-id]").forEach(row => {
+      const totalCell = row.querySelector(".product-total-price");
+      if (totalCell) {
+        subtotal += parseFloat(totalCell.textContent.replace("$", "")) || 0;
+      }
+    });
+    const subtotalElem = document.getElementById("cart-subtotal");
+    if (subtotalElem) {
+      subtotalElem.textContent = `$${subtotal.toFixed(2)}`;
+    }
+  }
+
+  // Handle plus/minus buttons and input changes
+  document.querySelectorAll("tr[data-product-id]").forEach(row => {
+    const decrementBtn = row.querySelector(".input-number-decrement");
+    const incrementBtn = row.querySelector(".input-number-increment");
+    const quantityInput = row.querySelector(".input-number");
+    const productId = quantityInput.dataset.productId;
+
+    if (!decrementBtn || !incrementBtn || !quantityInput || !productId) return;
+
+    const minQty = parseInt(quantityInput.min) || 1;
+    const maxQty = parseInt(quantityInput.max) || 1000;
+
+    function updateButtons(qty) {
+      decrementBtn.style.pointerEvents = qty <= minQty ? "none" : "auto";
+      decrementBtn.style.opacity = qty <= minQty ? 0.5 : 1;
+      incrementBtn.style.pointerEvents = qty >= maxQty ? "none" : "auto";
+      incrementBtn.style.opacity = qty >= maxQty ? 0.5 : 1;
+    }
+
+    function changeQuantity(newQty) {
+      if (newQty < minQty) newQty = minQty;
+      if (newQty > maxQty) newQty = maxQty;
+      quantityInput.value = newQty;
+
+      sendQuantityUpdate(
+        productId,
+        newQty,
+        data => {
+          updateRowTotal(row, newQty);
+          updateCartSubtotal();
+          updateButtons(newQty);
+          // Optionally update cart quantity badge or summary here
+        },
+        err => {
+          console.error("Quantity update failed:", err);
+          // Optionally revert UI or show error message
+        }
+      );
+    }
+
+    decrementBtn.addEventListener("click", () => {
+      let currentQty = parseInt(quantityInput.value) || minQty;
+      if (currentQty > minQty) {
+        changeQuantity(currentQty - 1);
+      }
+    });
+
+    incrementBtn.addEventListener("click", () => {
+      let currentQty = parseInt(quantityInput.value) || minQty;
+      if (currentQty < maxQty) {
+        changeQuantity(currentQty + 1);
+      }
+    });
+
+    quantityInput.addEventListener("change", () => {
+      let val = parseInt(quantityInput.value);
+      if (isNaN(val)) val = minQty;
+      changeQuantity(val);
+    });
+
+    // Initialize buttons on page load
+    updateButtons(parseInt(quantityInput.value) || minQty);
+  });
+});
+</script>
+
 
 {% endblock %}

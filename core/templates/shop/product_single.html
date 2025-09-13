@@ -2,144 +2,101 @@
 {% load static %}
 {% block content %}
 
-    <!-- slider Area Start-->
-    <div class="slider-area ">
-        <!-- Mobile Menu -->
-        <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap text-center">
-                            <h2>product Details</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- slider Area End-->
-<!--================Single Product Area =================-->
-<div class="product_image_area">
+<div class="slider-area">
+  <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
     <div class="container">
-        <div class="row justify-content-center">
-
-            <!-- Product Images -->
-            <div class="col-lg-12">
-                <div class="product_img_slide owl-carousel">
-                    {% if product.image %}
-                        <div class="single_product_img">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
-                        </div>
-                    {% endif %}
-                    {% for img in product.images.all %}
-                        <div class="single_product_img">
-                            <img src="{{ img.image.url }}" alt="{{ img.alt|default:product.name }}" class="img-fluid">
-                        </div>
-                    {% empty %}
-                        <div class="single_product_img">
-                            <img src="{% static 'img/product/no_image.png' %}" alt="No image" class="img-fluid">
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Product Info -->
-            <div class="col-lg-8">
-                <div class="single_product_text text-center">
-                    <h3>{{ product.name }}</h3>
-                    <p>{{ product.description }}</p>
-
-                    <div class="card_area">
-                        <div class="product_count_area">
-                            <p>Quantity</p>
-                            <div class="product_count d-inline-block">
-                                <span class="product_count_item number-decrement">
-                                    <i class="ti-minus"></i>
-                                </span>
-                                <input id="product-quantity" class="product_count_item input-number" type="text" value="1" min="1" max="{{ product.stock }}">
-                                <span class="product_count_item number-increment">
-                                    <i class="ti-plus"></i>
-                                </span>
-                            </div>
-                            <p>${{ product.price }}</p>
-                        </div>
-
-                        <div class="add_to_cart">
-                            <!-- AJAX button -->
-                            <button type="button" 
-                                    class="btn_3 add-to-cart-btn" 
-                                    data-product-id="{{ product.id }}">
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Brand & Category -->
-                    <p><strong>Brand:</strong> {{ product.brand.name }}</p>
-                    <p><strong>Category:</strong> {{ product.category.name }}</p>
-                </div>
-            </div>
+      <div class="row">
+        <div class="col-xl-12">
+          <div class="hero-cap text-center">
+            <h2>{{ product.name }}</h2>
+            <h3>
+              <strong>Brand:</strong> {{ product.brand.name }}
+            </h3>
+            <h3>
+              <strong>Category:</strong> {{ product.category.name }}
+            </h3>
+          </div>
         </div>
-
-        <!-- Related Products -->
-        {% if related_products %}
-        <div class="row mt-5">
-            <div class="col-12">
-                <h4>Related Products</h4>
-            </div>
-            {% for related in related_products %}
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="single_product_item">
-                        <a href="{{ related.get_absolute_url }}">
-                            <img src="{{ related.image.url }}" alt="{{ related.name }}" class="img-fluid">
-                        </a>
-                        <h5><a href="{{ related.get_absolute_url }}">{{ related.name }}</a></h5>
-                        <p>${{ related.price }}</p>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
-<!--================End Single Product Area =================-->
 
-<!-- jQuery -->
+<div class="product_image_area">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="product_img_slide owl-carousel">
+          {% if product.image %}
+          <div class="single_product_img">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+          </div>
+          {% endif %}
+          {% if product.images.all %}
+          {% for img in product.images.all %}
+          <div class="single_product_img">
+            <img src="{{ img.image.url }}" alt="{{ img.alt|default:product.name }}" class="img-fluid">
+          </div>
+          {% endfor %}
+          {% endif %}
+          {% if not product.image and not product.images.exists %}
+          <div class="single_product_img">
+            <img src="{% static 'img/product/no_image.png' %}" alt="No image" class="img-fluid">
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="single_product_text text-center">
+          <h3>{{ product.name }}</h3>
+          <p>{{ product.description }}</p>
+          <div class="card_area">
+            <div class="product_count_area">
+              <p>Quantity</p>
+              <div class="product_count d-inline-block">
+                <span class="product_count_item number-decrement"><i class="ti-minus"></i></span>
+                <input id="product-quantity" class="product_count_item input-number" type="text" value="1" min="1" max="{{ product.stock }}">
+                <span class="product_count_item number-increment"><i class="ti-plus"></i></span>
+              </div>
+              <p>${{ product.price }}</p>
+            </div>
+            <div class="add_to_cart">
+              <button type="button" class="btn_3 add-to-cart-btn" data-product-id="{{ product.id }}">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- jQuery and AJAX script -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-$(document).ready(function() {
-    $(".add-to-cart-btn").click(function(e) {
-        e.preventDefault();
-
-        let productId = $(this).data("product-id");
-        let quantity = $("#product-quantity").val();
-
-        $.ajax({
-            url: "{% url 'cart:session-add-product' %}",
-            type: "POST",
-            data: {
-                product_id: productId,
-                quantity: quantity,
-                csrfmiddlewaretoken: "{{ csrf_token }}"
-            },
-            success: function(response) {
-                // Show success message
-                alert("Product added to cart!");
-                
-                // Update cart counter
-                $("#cart-count").text(response.total_quantity);
-            },
-            error: function(xhr, status, error) {
-                console.error("Error adding product:", error);
-            }
-        });
+$(document).ready(function () {
+  $(".add-to-cart-btn").on("click", function (e) {
+    e.preventDefault();
+    const productId = $(this).data("product-id");
+    const maxStock = parseInt("{{ product.stock }}", 10);
+    let quantity = parseInt($("#product-quantity").val(), 10) || 1;
+    if (quantity < 1) quantity = 1;
+    if (quantity > maxStock) quantity = maxStock;
+    $.post({
+      url: "{% url 'cart:session-add-product' %}",
+      data: {
+        product_id: productId,
+        quantity: quantity,
+        csrfmiddlewaretoken: "{{ csrf_token }}"
+      },
+      success: function (response) {
+        $("#cart-count").text(response.total_quantity);
+      },
+      error: function (xhr) {
+        console.error("Error adding product:", xhr.responseText);
+      }
     });
+  });
 });
 </script>
 
-<!-- Example cart count badge (e.g., in navbar) -->
-<span id="cart-count">{{ cart.get_total_quantity }}</span>
-
-{% include "website/newsletter.html" %}
 {% endblock %}

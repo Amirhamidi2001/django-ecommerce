@@ -54,26 +54,40 @@ class ProductDetailView(DetailView):
     template_name = "shop/product_single.html"
     context_object_name = "product"
 
-    # This tells Django to use the slug instead of the default pk lookup
     slug_field = "slug"
     slug_url_kwarg = "slug"
 
     def get_queryset(self):
-        # Only active products
         return Product.objects.filter(is_active=True)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = self.object
 
-        # Related products: same category, excluding the current product
+        # Get cart from session
+        cart = self.request.session.get("cart", {})
+
+        # Cart may store product IDs as strings → make sure to check both str and int
+        product_id_str = str(product.id)
+        product_id_int = product.id
+
+        product_quantity = 1  # default
+        if product_id_str in cart:
+            product_quantity = cart[product_id_str].get("quantity", 1)
+        elif product_id_int in cart:
+            product_quantity = cart[product_id_int].get("quantity", 1)
+
+        context["product_quantity"] = product_quantity
+
+        # Related products
         context["related_products"] = (
             Product.objects.filter(category=product.category, is_active=True)
             .exclude(id=product.id)
-            .order_by("-created_at")[:4]  # Limit to 4
+            .order_by("-created_at")[:4]
         )
 
-        # Add brand and category to the context for easy template access
+        # Extra info
         context["brand"] = product.brand
         context["category"] = product.category
+
         return context
