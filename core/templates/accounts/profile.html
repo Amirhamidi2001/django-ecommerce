@@ -27,7 +27,16 @@
                     <div class="login_part_form">
                         <div class="login_part_form_iner">
                             <h3>Your Profile <br> Manage your information</h3>
-                            <form class="row contact_form" action="" method="post" enctype="multipart/form-data" novalidate="novalidate">
+                            <div class="profile_picture mb-3">
+                                <div class="media align-items-center">
+                                    {% if user.profile.profile_picture %}
+                                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
+                                    {% else %}
+                                    <i class="fas fa-user"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <form class="row contact_form" action="{% url 'accounts:profile' %}" method="post" enctype="multipart/form-data" novalidate="novalidate">
                                 {% csrf_token %}
                                 <div class="col-md-6 form-group p_star">
                                     <input type="text" class="form-control" id="id_first_name" name="first_name" placeholder="First Name" value="{{ form.instance.first_name }}">
@@ -43,9 +52,6 @@
                                 </div>
                                 <div class="col-md-12 form-group p_star">
                                     <input type="file" class="form-control" id="id_profile_picture" name="profile_picture" placeholder="Profile Picture" accept="image/*">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="id_birth_date" name="birth_date" placeholder="Birth Date" value="{{ form.instance.birth_date }}">
                                 </div>
                                 <div class="col-md-12 form-group">
                                     <button type="submit" class="btn_3">Update Profile</button>
