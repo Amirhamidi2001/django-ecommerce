@@ -1,69 +1,96 @@
 {% extends "base.html" %}
+{% load widget_tweaks %}
 {% load static %}
 {% block content %}
-
-    <!-- slider Area Start-->
-    <div class="slider-area ">
-        <!-- Mobile Menu -->
-        <div class="single-slider slider-height2 d-flex align-items-center" data-background="{% static 'img/hero/category.jpg' %}">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap text-center">
-                            <h2>Your Profile</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Hero Section -->
+<div class="slider-area">
+  <div class="single-slider slider-height2 d-flex align-items-center justify-content-center" data-background="{% static 'img/hero/category.jpg' %}">
+    <div class="container text-center">
+      <div class="hero-cap text-white">
+        <h2 class="fw-bold">Your Profile
+        </h2>
+        <p class="lead">Manage and update your personal information
+        </p>
+      </div>
     </div>
-    <!-- slider Area End-->
-
-    <!--================ profile_part Area =================-->
-    <section class="login_part section_padding">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 col-md-10">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Your Profile <br> Manage your information</h3>
-                            <div class="profile_picture mb-3">
-                                <div class="media align-items-center">
-                                    {% if user.profile.profile_picture %}
-                                    <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover;">
-                                    {% else %}
-                                    <i class="fas fa-user"></i>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <form class="row contact_form" action="{% url 'accounts:profile' %}" method="post" enctype="multipart/form-data" novalidate="novalidate">
-                                {% csrf_token %}
-                                <div class="col-md-6 form-group p_star">
-                                    <input type="text" class="form-control" id="id_first_name" name="first_name" placeholder="First Name" value="{{ form.instance.first_name }}">
-                                </div>
-                                <div class="col-md-6 form-group p_star">
-                                    <input type="text" class="form-control" id="id_last_name" name="last_name" placeholder="Last Name" value="{{ form.instance.last_name }}">
-                                </div>
-                                <div class="col-md-6 form-group p_star">
-                                    <input type="text" class="form-control" id="id_phone_number" name="phone_number" placeholder="Phone Number" value="{{ form.instance.phone_number }}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="text" class="form-control" id="id_bio" name="bio" placeholder="Bio" value="{{ form.instance.bio }}">
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="file" class="form-control" id="id_profile_picture" name="profile_picture" placeholder="Profile Picture" accept="image/*">
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <button type="submit" class="btn_3">Update Profile</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
+  </div>
+</div>
+<!-- Profile Section -->
+<section class="section_padding py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <div class="card shadow-lg border-0 rounded-4">
+          <div class="card-body p-5">
+            <div class="text-center mb-4">
+              <div class="position-relative d-inline-block">
+                {% if user.profile.profile_picture %}
+                <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture"
+                     class="rounded-circle shadow"
+                     style="width: 140px; height: 140px; object-fit: cover;">
+                {% else %}
+                <div class="bg-light rounded-circle d-flex align-items-center justify-content-center shadow"
+                     style="width: 140px; height: 140px;">
+                  <i class="fas fa-user fa-4x text-secondary">
+                  </i>
                 </div>
+                {% endif %}
+                <div class="mt-3">
+                  <small class="text-muted">{{ user.email }}</small>
+                </div>
+              </div>
             </div>
+            <h5 class="text-center text-primary fw-semibold mb-4">Edit Profile Information
+            </h5>
+            <form action="{% url 'accounts:profile' %}" method="post" enctype="multipart/form-data" novalidate>
+              {% csrf_token %}
+              <div class="row g-3">
+                <!-- First Name -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">First Name</label>
+                  {{ form.first_name|add_class:"form-control form-control-lg" }}
+                </div>
+                <!-- Last Name -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Last Name</label>
+                  {{ form.last_name|add_class:"form-control form-control-lg" }}
+                </div>
+                <!-- Phone Number -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Phone Number</label>
+                  {{ form.phone_number|add_class:"form-control form-control-lg" }}
+                </div>
+                <!-- Birth Date -->
+                <div class="col-md-6">
+                  <label class="form-label fw-semibold">Birth Date</label>
+                  {{ form.birth_date|add_class:"form-control form-control-lg" }}
+                </div>
+                <!-- Bio -->
+                <div class="col-md-12">
+                  <label class="form-label fw-semibold">Bio</label>
+                  {{ form.bio|add_class:"form-control form-control-lg" }}
+                </div>
+                <!-- Profile Picture -->
+                <div class="col-md-12">
+                  <label class="form-label fw-semibold">Profile Picture</label>
+                  {{ form.profile_picture|add_class:"form-control form-control-lg" }}
+                </div>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-4">
+                <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow-sm">
+                  <i class="fas fa-save me-2">
+                  </i>Update Profile
+                </button>
+                <a href="{% url 'accounts:change-password' %}" class="text-decoration-none text-muted">
+                  <i class="fas fa-key me-1">
+                  </i> Change password
+                </a>
+              </div>
+            </form>
+          </div>
         </div>
-    </section>
-    <!--================ profile_part end =================-->
-
-
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
